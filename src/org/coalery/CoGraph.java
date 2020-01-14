@@ -31,7 +31,7 @@ public class CoGraph extends JPanel {
 	public Integer getValueByContentName(String contentName) throws ValueNotFoundException {
 		int index = contents.indexOf(contentName);
 		if(index == -1)
-			throw new ValueNotFoundException();
+			throw new ValueNotFoundException(contentName);
 		return values.get(index);
 	}
 	
