@@ -1,5 +1,6 @@
 package org.coalery;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,6 +18,7 @@ public class CoGraph extends JPanel {
 	private List<Integer> values;
 	
 	private int graphMargin = 30;
+	private int graphBarWidth = 10;
 	
 	public CoGraph(String[] contents, Integer[] values) {
 		this(Arrays.asList(contents), Arrays.asList(values));
@@ -50,6 +52,9 @@ public class CoGraph extends JPanel {
 		this.graphMargin = graphMargin;
 		repaint();
 	}
+	
+	public int getGraphBarWidth() { return graphBarWidth; }
+	public void setGraphBarWidth(int graphBarWidth) { this.graphBarWidth = graphBarWidth; }
 
 	@Override
 	public void paint(Graphics g) {
@@ -73,12 +78,27 @@ public class CoGraph extends JPanel {
 		for(int i=1; i<=contents.size(); i++) // start to 1
 			g2.drawLine(l2x1 + graphContentDeltaX * i, getSize().height - graphMargin - 5, l2x1 + graphContentDeltaX * i, getSize().height - graphMargin + 5);
 		
-		// Contents String Draw
+		// Content String Draw
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setFont(new Font("Consolas", Font.PLAIN, 12)); // or Naver's D2Coding
 		
-		for(int i=0; i<contents.size(); i++)
-			g2.drawString(contents.get(i), contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - ( contents.get(i).length() * 3 ), contentStrStartPoint.y); 
+		for(int i=0; i<contents.size(); i++) {
+			String strToDraw = contents.get(i);
+			if(strToDraw.length() > 6)
+				strToDraw = strToDraw.substring(0, 6) + "..";
+			g2.drawString(strToDraw, contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - ( strToDraw.length() / 2 * 7 ), contentStrStartPoint.y);
+		}
+		
+		// Value Draw
+		g2.setColor(Color.ORANGE);
+		int maxVal = -1;
+		for(int i=0; i<values.size(); i++)
+			if(values.get(i) > maxVal)
+				maxVal = values.get(i);
+		for(int i=0; i<values.size(); i++) {
+			int graphBarHeight = (int)((values.get(i) / (float)maxVal) * graphHeight);
+			g2.fillRect(contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ), getSize().height - graphMargin - graphBarHeight, graphBarWidth, graphBarHeight);
+		}
 	}
 	
 }

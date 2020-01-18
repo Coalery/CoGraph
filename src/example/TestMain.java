@@ -10,7 +10,7 @@ import org.coalery.CoGraph;
 public class TestMain {
 	
 	public static void main(String[] args) {
-		CoGraph graph = new CoGraph(new String[] {"Apple", "Melon", "Water", "Juice", "WaterMelon"}, new Integer[] {1, 2, 4, 5, 10});
+		CoGraph graph = new CoGraph(new String[] {"Apple", "Melon", "Water", "Juice", "WaterMelonnnnn"}, new Integer[] {1, 2, 4, 5, 10});
 		graph.getValueByContentName("");
 		
 		JFrame frame = new JFrame("CoGraph Test");
