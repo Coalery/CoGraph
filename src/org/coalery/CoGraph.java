@@ -55,6 +55,12 @@ public class CoGraph extends JPanel {
 	
 	public int getGraphBarWidth() { return graphBarWidth; }
 	public void setGraphBarWidth(int graphBarWidth) { this.graphBarWidth = graphBarWidth; }
+	
+	private int getYaxisGap(int maxVal) {
+		for(int i=0; true; i++)
+			if(5*i <= maxVal && maxVal < 5*(i+1))
+				return i+1;
+	}
 
 	@Override
 	public void paint(Graphics g) {
@@ -70,24 +76,12 @@ public class CoGraph extends JPanel {
 		
 		Point contentStrStartPoint = new Point(l2x1, l2y1 + 10);
 		
-		
 		// Base Line Draw
 		g2.drawLine(l1x1, l1y1, l1x2, l1y2 + 5);
 		g2.drawLine(l2x1 - 5, l2y1, l2x2, l2y2);
 		
 		for(int i=1; i<=contents.size(); i++) // start to 1
 			g2.drawLine(l2x1 + graphContentDeltaX * i, getSize().height - graphMargin - 5, l2x1 + graphContentDeltaX * i, getSize().height - graphMargin + 5);
-		
-		// Content String Draw
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setFont(new Font("Consolas", Font.PLAIN, 12)); // or Naver's D2Coding
-		
-		for(int i=0; i<contents.size(); i++) {
-			String strToDraw = contents.get(i);
-			if(strToDraw.length() > 6)
-				strToDraw = strToDraw.substring(0, 6) + "..";
-			g2.drawString(strToDraw, contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - ( strToDraw.length() / 2 * 7 ), contentStrStartPoint.y);
-		}
 		
 		// Value Draw
 		g2.setColor(Color.ORANGE);
@@ -98,6 +92,23 @@ public class CoGraph extends JPanel {
 		for(int i=0; i<values.size(); i++) {
 			int graphBarHeight = (int)((values.get(i) / (float)maxVal) * graphHeight);
 			g2.fillRect(contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ), getSize().height - graphMargin - graphBarHeight, graphBarWidth, graphBarHeight);
+		}
+		
+		// X Axis Draw
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setFont(new Font("Consolas", Font.PLAIN, 12)); // or Naver's D2Coding
+		
+		for(int i=0; i<contents.size(); i++) {
+			String strToDraw = contents.get(i);
+			if(strToDraw.length() > 6)
+				strToDraw = strToDraw.substring(0, 6) + "..";
+			g2.drawString(strToDraw, contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - ( strToDraw.length() / 2 * 7 ), contentStrStartPoint.y);
+		}
+		
+		// Y Axis Draw
+		int yAxisGap = getYaxisGap(maxVal);
+		for(int i=0; i<yAxisGap / 5; i++) {
+			
 		}
 	}
 	
