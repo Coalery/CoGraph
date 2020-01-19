@@ -17,7 +17,7 @@ public class CoGraph extends JPanel {
 	private List<String> contents; // or item? ( variable name )
 	private List<Integer> values;
 	
-	private int graphMargin = 30;
+	private int graphMargin = 50;
 	private int graphBarWidth = 10;
 	
 	public CoGraph(String[] contents, Integer[] values) {
@@ -57,8 +57,10 @@ public class CoGraph extends JPanel {
 	public void setGraphBarWidth(int graphBarWidth) { this.graphBarWidth = graphBarWidth; }
 	
 	private int getYaxisGap(int maxVal) {
+		if(maxVal % 10 == 0)
+			return maxVal / 10;
 		for(int i=0; true; i++)
-			if(5*i <= maxVal && maxVal < 5*(i+1))
+			if(10*i <= maxVal && maxVal < 10*(i+1))
 				return i+1;
 	}
 
@@ -77,11 +79,17 @@ public class CoGraph extends JPanel {
 		Point contentStrStartPoint = new Point(l2x1, l2y1 + 10);
 		
 		// Base Line Draw
+		g2.setColor(Color.BLACK);
 		g2.drawLine(l1x1, l1y1, l1x2, l1y2 + 5);
 		g2.drawLine(l2x1 - 5, l2y1, l2x2, l2y2);
 		
 		for(int i=1; i<=contents.size(); i++) // start to 1
-			g2.drawLine(l2x1 + graphContentDeltaX * i, getSize().height - graphMargin - 5, l2x1 + graphContentDeltaX * i, getSize().height - graphMargin + 5);
+			g2.drawLine(l2x1 + graphContentDeltaX * i, getSize().height - graphMargin, l2x1 + graphContentDeltaX * i, getSize().height - graphMargin + 5);
+		g2.setColor(Color.BLACK);
+		for(int i=5; i>=1; i--) {
+			int calY = graphHeight / 5 * (5-i) + graphMargin;
+			g2.drawLine(l2x1, calY, l2x2, calY);
+		}
 		
 		// Value Draw
 		g2.setColor(Color.ORANGE);
@@ -95,20 +103,24 @@ public class CoGraph extends JPanel {
 		}
 		
 		// X Axis Draw
+		g2.setColor(Color.BLACK);
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setFont(new Font("Consolas", Font.PLAIN, 12)); // or Naver's D2Coding
 		
 		for(int i=0; i<contents.size(); i++) {
 			String strToDraw = contents.get(i);
-			if(strToDraw.length() > 6)
-				strToDraw = strToDraw.substring(0, 6) + "..";
+			if(strToDraw.length() > graphContentDeltaX / 10) // TODO You have to 
+				strToDraw = strToDraw.substring(0, graphContentDeltaX / 10) + "..";
 			g2.drawString(strToDraw, contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - ( strToDraw.length() / 2 * 7 ), contentStrStartPoint.y);
 		}
 		
 		// Y Axis Draw
+		g2.setColor(Color.BLACK);
 		int yAxisGap = getYaxisGap(maxVal);
-		for(int i=0; i<yAxisGap / 5; i++) {
-			
+		for(int i=5; i>=1; i--) {
+			int calY = graphHeight / 5 * (5-i) + graphMargin;
+			g2.drawLine(graphMargin - 5, calY, graphMargin, calY);
+			g2.drawString(String.format("%4d", yAxisGap * 2 * i), graphMargin - 35, calY + 5);
 		}
 	}
 	
