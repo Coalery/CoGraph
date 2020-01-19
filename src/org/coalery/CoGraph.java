@@ -85,7 +85,7 @@ public class CoGraph extends JPanel {
 		
 		for(int i=1; i<=contents.size(); i++) // start to 1
 			g2.drawLine(l2x1 + graphContentDeltaX * i, getSize().height - graphMargin, l2x1 + graphContentDeltaX * i, getSize().height - graphMargin + 5);
-		g2.setColor(Color.BLACK);
+		g2.setColor(new Color(192, 192, 192));
 		for(int i=5; i>=1; i--) {
 			int calY = graphHeight / 5 * (5-i) + graphMargin;
 			g2.drawLine(l2x1, calY, l2x2, calY);
@@ -97,9 +97,10 @@ public class CoGraph extends JPanel {
 		for(int i=0; i<values.size(); i++)
 			if(values.get(i) > maxVal)
 				maxVal = values.get(i);
+		int yAxisGap = getYaxisGap(maxVal);
 		for(int i=0; i<values.size(); i++) {
-			int graphBarHeight = (int)((values.get(i) / (float)maxVal) * graphHeight);
-			g2.fillRect(contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ), getSize().height - graphMargin - graphBarHeight, graphBarWidth, graphBarHeight);
+			int graphBarHeight = (int)((values.get(i) / (float)(yAxisGap * 10)) * graphHeight);
+			g2.fillRect(contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - (graphBarWidth / 2), getSize().height - graphMargin - graphBarHeight, graphBarWidth, graphBarHeight);
 		}
 		
 		// X Axis Draw
@@ -116,7 +117,6 @@ public class CoGraph extends JPanel {
 		
 		// Y Axis Draw
 		g2.setColor(Color.BLACK);
-		int yAxisGap = getYaxisGap(maxVal);
 		for(int i=5; i>=1; i--) {
 			int calY = graphHeight / 5 * (5-i) + graphMargin;
 			g2.drawLine(graphMargin - 5, calY, graphMargin, calY);
