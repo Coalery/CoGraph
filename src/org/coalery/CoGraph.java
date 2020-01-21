@@ -92,7 +92,8 @@ public class CoGraph extends JPanel {
 		}
 		
 		// Value Draw
-		g2.setColor(Color.ORANGE);
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setFont(new Font("Consolas", Font.PLAIN, 10)); // or Naver's D2Coding
 		int maxVal = -1;
 		for(int i=0; i<values.size(); i++)
 			if(values.get(i) > maxVal)
@@ -100,17 +101,23 @@ public class CoGraph extends JPanel {
 		int yAxisGap = getYaxisGap(maxVal);
 		for(int i=0; i<values.size(); i++) {
 			int graphBarHeight = (int)((values.get(i) / (float)(yAxisGap * 10)) * graphHeight);
-			g2.fillRect(contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - (graphBarWidth / 2), getSize().height - graphMargin - graphBarHeight, graphBarWidth, graphBarHeight);
+			int x = contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - (graphBarWidth / 2);
+			int y = getSize().height - graphMargin - graphBarHeight;
+			String valueStr = String.valueOf(values.get(i));
+			
+			g2.setColor(Color.ORANGE);
+			g2.fillRect(x, y, graphBarWidth, graphBarHeight);
+			
+			g2.setColor(Color.BLACK);
+			g2.drawString(valueStr, x + graphBarWidth / 2.0f - valueStr.length() * 3.0f, y - 1);
 		}
 		
 		// X Axis Draw
 		g2.setColor(Color.BLACK);
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setFont(new Font("Consolas", Font.PLAIN, 12)); // or Naver's D2Coding
-		
 		for(int i=0; i<contents.size(); i++) {
 			String strToDraw = contents.get(i);
-			if(strToDraw.length() > graphContentDeltaX / 10) // TODO You have to 
+			if(strToDraw.length() > graphContentDeltaX / 10)
 				strToDraw = strToDraw.substring(0, graphContentDeltaX / 10) + "..";
 			g2.drawString(strToDraw, contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - ( strToDraw.length() / 2 * 7 ), contentStrStartPoint.y);
 		}
