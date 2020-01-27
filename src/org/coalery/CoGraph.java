@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.coalery.exception.CoGraphInvalidException;
+
 @SuppressWarnings("serial")
 public class CoGraph extends JPanel {
 	
@@ -20,11 +22,14 @@ public class CoGraph extends JPanel {
 	private int graphMargin = 50;
 	private int graphBarWidth = 10;
 	
-	public CoGraph(String[] contents, Integer[] values) {
+	public CoGraph(String[] contents, Integer[] values) throws CoGraphInvalidException {
 		this(Arrays.asList(contents), Arrays.asList(values));
 	}
 	
-	public CoGraph(List<String> contents, List<Integer> values) { // if contents length != values length; then process idx 0 ~ min(contents length, values length)
+	public CoGraph(List<String> contents, List<Integer> values) throws CoGraphInvalidException { // if contents length != values length; then process idx 0 ~ min(contents length, values length)
+		if(contents.size() != values.size())
+			throw new CoGraphInvalidException();
+		
 		this.contents = contents;
 		this.values = values;
 	}
