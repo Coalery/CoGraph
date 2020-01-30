@@ -17,37 +17,46 @@ import org.coalery.exception.CoGraphInvalidException;
 public class CoGraph extends JPanel {
 	
 	private List<String> contents; // or item? ( variable name )
-	private List<Integer> values;
+	private List<CoGraphItem> values;
 	
 	private int graphMargin = 50;
-	private int graphBarWidth = 10;
+	private int graphBarWidth = 20;
 	
-	public CoGraph(String[] contents, Integer[] values) throws CoGraphInvalidException {
+	private Color[] graphBarColor = {Color.ORANGE, Color.BLUE};
+	
+	public CoGraph(String[] contents, CoGraphItem[] values) throws CoGraphInvalidException {
 		this(Arrays.asList(contents), Arrays.asList(values));
 	}
 	
-	public CoGraph(List<String> contents, List<Integer> values) throws CoGraphInvalidException { // if contents length != values length; then process idx 0 ~ min(contents length, values length)
+	public CoGraph(List<String> contents, List<CoGraphItem> values) throws CoGraphInvalidException { // if contents length != values length; then process idx 0 ~ min(contents length, values length)
+		if(contents == null || values == null)
+			throw new CoGraphInvalidException("Contents List or Values List is null!");
+		if(contents.size() == 0 || values.size() == 0)
+			throw new CoGraphInvalidException("Contents List or Values List length is 0!");
 		if(contents.size() != values.size())
-			throw new CoGraphInvalidException();
-		
+			throw new CoGraphInvalidException("Contents List length and Values List length is different!");
+		int length = values.get(0).length();
+		for(int i=1; i<values.size(); i++)
+			if(values.get(i).length() != length)
+				throw new CoGraphInvalidException("Values List's Items length is different each other!");
 		this.contents = contents;
 		this.values = values;
 	}
 	
 	public List<String> getContents() { return contents; }
-	public List<Integer> getValues() { return values; }
+	public List<CoGraphItem> getValues() { return values; }
 	
 	public void setContents(List<String> contents) { this.contents = contents; }
-	public void setValues(List<Integer> values) { this.values = values; }
+	public void setValues(List<CoGraphItem> values) { this.values = values; }
 	
 	public String getContentAt(int index) { return contents.get(index); }
-	public Integer getValueAt(int index) { return values.get(index); }
+	public CoGraphItem getValueAt(int index) { return values.get(index); }
 	
 	public void setContentAt(int index, String content) { contents.set(index, content); }
-	public void setValueAt(int index, Integer value) { values.set(index, value); }
+	public void setValueAt(int index, CoGraphItem value) { values.set(index, value); }
 	
 	public Integer getValueByContentName(String contentName) { return contents.indexOf(contentName); }
-	public void setValueByContentName(String contentName, int value) {
+	public void setValueByContentName(String contentName, CoGraphItem value) {
 		int targetIndex = getValueByContentName(contentName);
 		if(targetIndex != -1) setValueAt(targetIndex, value);
 	}
@@ -101,21 +110,22 @@ public class CoGraph extends JPanel {
 		g2.setFont(new Font("Consolas", Font.PLAIN, 10)); // or Naver's D2Coding
 		int maxVal = -1;
 		for(int i=0; i<values.size(); i++)
-			if(values.get(i) > maxVal)
-				maxVal = values.get(i);
+			for(int j=0; j<values.get(i).length(); j++)
+				if(values.get(i).getValue(j) > maxVal)
+					maxVal = values.get(i).getValue(j);
 		int yAxisGap = getYaxisGap(maxVal);
-		for(int i=0; i<values.size(); i++) {
-			int graphBarHeight = (int)((values.get(i) / (float)(yAxisGap * 10)) * graphHeight);
-			int x = contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - (graphBarWidth / 2);
-			int y = getSize().height - graphMargin - graphBarHeight;
-			String valueStr = String.valueOf(values.get(i));
-			
-			g2.setColor(Color.ORANGE);
-			g2.fillRect(x, y, graphBarWidth, graphBarHeight);
-			
-			g2.setColor(Color.BLACK);
-			g2.drawString(valueStr, x + graphBarWidth / 2.0f - valueStr.length() * 3.0f, y - 1);
-		}
+		for(int i=0; i<values.size(); i++)
+			for(int j=0; j<values.get(i).length(); j++) {
+				int graphBarHeight = (int)((values.get(i).getValue(j) / (float)(yAxisGap * 10)) * graphHeight);
+				int x = contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - (values.get(i).length() * graphBarWidth / 2) + graphBarWidth * j;
+				int y = getSize().height - graphMargin - graphBarHeight;
+				String valueStr = String.valueOf(values.get(i).getValue(j));
+				g2.setColor(graphBarColor[j % 2]);
+				g2.fillRect(x, y, graphBarWidth, graphBarHeight);
+				
+				g2.setColor(Color.BLACK);
+				g2.drawString(valueStr, x + graphBarWidth / 2.0f - valueStr.length() * 3.0f, y - 1);
+			}
 		
 		// X Axis Draw
 		g2.setColor(Color.BLACK);
