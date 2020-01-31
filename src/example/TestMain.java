@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import org.coalery.CoGraph;
+import org.coalery.CoBarGraph;
 import org.coalery.CoGraphItem;
 import org.coalery.exception.CoGraphInvalidException;
 
@@ -42,9 +42,9 @@ public class TestMain {
 		values2.add(new CoGraphItem(73));
 		values2.add(new CoGraphItem(15));
 		
-		CoGraph graph0 = new CoGraph(contents, values0);
-		CoGraph graph1 = new CoGraph(contents, values1);
-		CoGraph graph2 = new CoGraph(contents, values2);
+		CoBarGraph graph0 = new CoBarGraph(contents, values0);
+		CoBarGraph graph1 = new CoBarGraph(contents, values1);
+		CoBarGraph graph2 = new CoBarGraph(contents, values2);
 		
 		JFrame frame = new JFrame("CoGraph Test");
 		frame.addWindowListener(new WindowAdapter() {public void windowClosing(WindowEvent event) {System.exit(0);}}); // Exit
