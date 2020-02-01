@@ -11,7 +11,7 @@ import org.coalery.CoBarGraph;
 import org.coalery.CoGraphItem;
 import org.coalery.exception.CoGraphInvalidException;
 
-public class TestMain {
+public class TestMain1 {
 	
 	public static void main(String[] args) throws CoGraphInvalidException {
 		ArrayList<String> contents = new ArrayList<String>();

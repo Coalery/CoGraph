@@ -217,7 +217,7 @@ public class CoBarGraph extends JPanel {
 				String strToDraw = contents.get(i);
 				if(strToDraw.length() > graphMargin / 10)
 					strToDraw = strToDraw.substring(0, graphMargin / 10);
-				g2.drawString(strToDraw, graphMargin - 40 - 1, graphContentDeltaY * i + graphMargin + 3.5f);
+				g2.drawString(strToDraw, graphMargin - 35 - 1, graphContentDeltaY * (i + 0.5f) + graphMargin + 3.5f);
 			}
 		}
 	}
