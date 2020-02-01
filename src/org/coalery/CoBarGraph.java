@@ -20,7 +20,7 @@ public class CoBarGraph extends JPanel {
 	private List<CoGraphItem> values;
 	
 	private int graphMargin = 50;
-	private int graphBarWidth = 20;
+	private int graphBarSize = 10;
 	
 	private Color[] graphBarColor = {Color.ORANGE, Color.BLUE};
 	
@@ -72,13 +72,13 @@ public class CoBarGraph extends JPanel {
 		repaint();
 	}
 	
-	public int getGraphBarWidth() { return graphBarWidth; }
-	public void setGraphBarWidth(int graphBarWidth) { this.graphBarWidth = graphBarWidth; }
+	public int getGraphBarSize() { return graphBarSize; }
+	public void setGraphBarWidth(int graphBarSize) { this.graphBarSize = graphBarSize; }
 	
 	public int getOrientation() { return graphBarOrientation; }
 	public void setOrientation(int graphBarOrientation) { this.graphBarOrientation = graphBarOrientation; }
 	
-	private int getYaxisGap(int maxVal) {
+	private int getAxisGap(int maxVal) {
 		if(maxVal % 10 == 0)
 			return maxVal / 10;
 		for(int i=0; true; i++)
@@ -122,18 +122,18 @@ public class CoBarGraph extends JPanel {
 				for(int j=0; j<values.get(i).length(); j++)
 					if(values.get(i).getValue(j) > maxVal)
 						maxVal = values.get(i).getValue(j);
-			int yAxisGap = getYaxisGap(maxVal);
+			int yAxisGap = getAxisGap(maxVal);
 			for(int i=0; i<values.size(); i++)
 				for(int j=0; j<values.get(i).length(); j++) {
 					int graphBarHeight = (int)((values.get(i).getValue(j) / (float)(yAxisGap * 10)) * graphHeight);
-					int x = contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - (values.get(i).length() * graphBarWidth / 2) + graphBarWidth * j;
+					int x = contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - (values.get(i).length() * graphBarSize / 2) + graphBarSize * j;
 					int y = getSize().height - graphMargin - graphBarHeight;
 					String valueStr = String.valueOf(values.get(i).getValue(j));
 					g2.setColor(graphBarColor[j % 2]);
-					g2.fillRect(x, y, graphBarWidth, graphBarHeight);
+					g2.fillRect(x, y, graphBarSize, graphBarHeight);
 					
 					g2.setColor(Color.BLACK);
-					g2.drawString(valueStr, x + graphBarWidth / 2.0f - valueStr.length() * 3.0f, y - 1);
+					g2.drawString(valueStr, x + graphBarSize / 2.0f - valueStr.length() * 3.0f, y - 1);
 				}
 			
 			// X Axis Draw
@@ -142,7 +142,7 @@ public class CoBarGraph extends JPanel {
 			for(int i=0; i<contents.size(); i++) {
 				String strToDraw = contents.get(i);
 				if(strToDraw.length() > graphContentDeltaX / 10)
-					strToDraw = strToDraw.substring(0, graphContentDeltaX / 10) + "..";
+					strToDraw = strToDraw.substring(0, graphContentDeltaX / 10);
 				g2.drawString(strToDraw, contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - ( strToDraw.length() / 2 * 7 ), contentStrStartPoint.y);
 			}
 			
@@ -154,7 +154,71 @@ public class CoBarGraph extends JPanel {
 				g2.drawString(String.format("%4d", yAxisGap * 2 * i), graphMargin - 35, calY + 5);
 			}
 		} else if(graphBarOrientation == GRAPH_HORIZONTAL_BAR) { // if graph orientation is horizontal.
-			// TODO
+			int l1x1 = graphMargin, l1y1 = graphMargin, l1x2 = graphMargin, l1y2 = getSize().height - graphMargin;
+			int l2x1 = graphMargin, l2y1 = getSize().height - graphMargin, l2x2 = getSize().width - graphMargin, l2y2 = getSize().height - graphMargin;
+			
+			int graphWidth = l2x2 - l2x1;
+			int graphHeight = l1y2 - l1y1;
+			
+			int graphContentDeltaY  = graphHeight / contents.size();
+			
+			Point contentStrStartPoint = new Point(l1x1 - 30, l1y1);
+			
+			// Base Line Draw
+			g2.setColor(Color.BLACK);
+			g2.drawLine(l1x1, l1y1, l1x2, l1y2 + 5);
+			g2.drawLine(l2x1 - 5, l2y1, l2x2, l2y2);
+			
+			for(int i=0; i<contents.size(); i++)
+				g2.drawLine(graphMargin, l1y1 + graphContentDeltaY * i, graphMargin - 5, l1y1 + graphContentDeltaY * i);
+			g2.setColor(new Color(192, 192, 192));
+			for(int i=4; i>=0; i--) {
+				int calX = graphWidth / 5 * (5-i) + graphMargin;
+				g2.drawLine(calX, l1y1, calX, l1y2 - 1);
+			}
+			
+			// Value Draw
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setFont(new Font("Consolas", Font.PLAIN, 10)); // or Naver's D2Coding
+			int maxVal = -1;
+			for(int i=0; i<values.size(); i++)
+				for(int j=0; j<values.get(i).length(); j++)
+					if(values.get(i).getValue(j) > maxVal)
+						maxVal = values.get(i).getValue(j);
+			
+			int xAxisGap = getAxisGap(maxVal);
+			for(int i=0; i<values.size(); i++)
+				for(int j=0; j<values.get(i).length(); j++) {
+					int graphBarWidth = (int)((values.get(i).getValue(j) / (float)(xAxisGap * 10)) * graphWidth);
+					int x = graphMargin + 1;
+					int y = contentStrStartPoint.y + graphContentDeltaY * i + graphContentDeltaY / 2 - (values.get(i).length() * graphBarSize / 2) + graphBarSize * j;
+					
+					String valueStr = String.valueOf(values.get(i).getValue(j));
+					g2.setColor(graphBarColor[j % 2]);
+					g2.fillRect(x, y, graphBarWidth, graphBarSize);
+					
+					g2.setColor(Color.BLACK);
+					g2.drawString(valueStr, x + graphBarWidth + 1, y + graphBarSize / 2 + 3);
+				}
+			
+			// X Axis Draw
+			g2.setColor(Color.BLACK);
+			g2.setFont(new Font("Consolas", Font.PLAIN, 12)); // or Naver's D2Coding
+			for(int i=0; i<5; i++) {
+				String strToDraw = String.valueOf(xAxisGap * 2 * (5-i));
+				int calX = graphWidth / 5 * (5-i) + graphMargin;
+				g2.drawLine(calX, getSize().height - graphMargin, calX, getSize().height - graphMargin + 5);
+				g2.drawString(strToDraw, calX - (strToDraw.length() * 3.0f), getSize().height - graphMargin + 16);
+			}
+			
+			// Y Axis Draw
+			g2.setColor(Color.BLACK);
+			for(int i=0; i<contents.size(); i++) {
+				String strToDraw = contents.get(i);
+				if(strToDraw.length() > graphMargin / 10)
+					strToDraw = strToDraw.substring(0, graphMargin / 10);
+				g2.drawString(strToDraw, graphMargin - 40 - 1, graphContentDeltaY * i + graphMargin + 3.5f);
+			}
 		}
 	}
 	
