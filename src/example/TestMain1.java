@@ -49,17 +49,26 @@ public class TestMain1 {
 		CoBarGraph graph0 = new CoBarGraph(contents, values0);
 		CoBarGraph graph1 = new CoBarGraph(contents, values1);
 		CoBarGraph graph2 = new CoBarGraph(contents, values2);
+		CoBarGraph emptyGraph = new CoBarGraph(new String[] {}, new CoGraphItem[] {});
+		
+		graph1.setGraphBarSize(5);
+		
+		emptyGraph.addItem("Hello1", new CoGraphItem(5, 3));
+		emptyGraph.addItem("Hello2", new CoGraphItem(7, 1));
+		emptyGraph.addItem("Hello3", new CoGraphItem(6, 9));
+		emptyGraph.addItem("Hello4", new CoGraphItem(3, 2));
 		
 		graph1.setOrientation(CoBarGraph.GRAPH_HORIZONTAL_BAR);
 		
 		JFrame frame = new JFrame("CoGraph Test");
 		frame.addWindowListener(new WindowAdapter() {public void windowClosing(WindowEvent event) {System.exit(0);}}); // Exit
-		frame.setLayout(new GridLayout(3, 1));
+		frame.setLayout(new GridLayout(4, 1));
 		
 		frame.setSize(600, 900);
 		frame.add(graph0);
 		frame.add(graph1);
 		frame.add(graph2);
+		frame.add(emptyGraph);
 		
 		frame.setVisible(true);
 //		frame.setResizable(false);

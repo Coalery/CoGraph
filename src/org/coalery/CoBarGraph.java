@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,34 +37,42 @@ public class CoBarGraph extends JPanel {
 	public CoBarGraph(List<String> contents, List<CoGraphItem> values) throws CoGraphInvalidException { // if contents length != values length; then process idx 0 ~ min(contents length, values length)
 		if(contents == null || values == null)
 			throw new CoGraphInvalidException("Contents List or Values List is null!");
-		if(contents.size() == 0 || values.size() == 0)
-			throw new CoGraphInvalidException("Contents List or Values List length is 0!");
 		if(contents.size() != values.size())
 			throw new CoGraphInvalidException("Contents List length and Values List length is different!");
-		int length = values.get(0).length();
-		for(int i=1; i<values.size(); i++)
-			if(values.get(i).length() != length)
-				throw new CoGraphInvalidException("Values List's Items length is different each other!");
-		this.contents = contents;
-		this.values = values;
+		if(contents.size() != 0) {
+			int length = values.get(0).length();
+			for(int i=1; i<values.size(); i++)
+				if(values.get(i).length() != length)
+					throw new CoGraphInvalidException("Values List's Items length is different each other!");
+		}
+		
+		this.contents = new ArrayList<String>();
+		this.values = new ArrayList<CoGraphItem>();
+		
+		this.contents.addAll(contents);
+		this.values.addAll(values);
 	}
 	
 	public List<String> getContents() { return contents; }
 	public List<CoGraphItem> getValues() { return values; }
 	
-	public void setContents(List<String> contents) { this.contents = contents; }
-	public void setValues(List<CoGraphItem> values) { this.values = values; }
-	
 	public String getContentAt(int index) { return contents.get(index); }
-	public CoGraphItem getValueAt(int index) { return values.get(index); }
+	public void setContentAt(int index, String content) {
+		contents.set(index, content);
+		repaint();
+	}
 	
-	public void setContentAt(int index, String content) { contents.set(index, content); }
-	public void setValueAt(int index, CoGraphItem value) { values.set(index, value); }
+	public CoGraphItem getValueAt(int index) { return values.get(index); }
+	public void setValueAt(int index, CoGraphItem value) {
+		values.set(index, value);
+		repaint();
+	}
 	
 	public Integer getValueByContentName(String contentName) { return contents.indexOf(contentName); }
 	public void setValueByContentName(String contentName, CoGraphItem value) {
 		int targetIndex = getValueByContentName(contentName);
 		if(targetIndex != -1) setValueAt(targetIndex, value);
+		repaint();
 	}
 	
 	public int getGraphMargin() { return graphMargin; }
@@ -73,10 +82,22 @@ public class CoBarGraph extends JPanel {
 	}
 	
 	public int getGraphBarSize() { return graphBarSize; }
-	public void setGraphBarWidth(int graphBarSize) { this.graphBarSize = graphBarSize; }
+	public void setGraphBarSize(int graphBarSize) {
+		this.graphBarSize = graphBarSize;
+		repaint();
+	}
 	
 	public int getOrientation() { return graphBarOrientation; }
-	public void setOrientation(int graphBarOrientation) { this.graphBarOrientation = graphBarOrientation; }
+	public void setOrientation(int graphBarOrientation) {
+		this.graphBarOrientation = graphBarOrientation;
+		repaint();
+	}
+	
+	public void addItem(String contentName, CoGraphItem value) {
+		contents.add(contentName);
+		values.add(value);
+		repaint();
+	}
 	
 	private int getAxisGap(int maxVal) {
 		if(maxVal % 10 == 0)
@@ -88,6 +109,9 @@ public class CoBarGraph extends JPanel {
 
 	@Override
 	public void paint(Graphics g) {
+		if(contents.size() == 0)
+			return;
+		
 		Graphics2D g2 = (Graphics2D)g;
 		
 		if(graphBarOrientation == GRAPH_VERTICAL_BAR) { // if graph orientation is vertical.
