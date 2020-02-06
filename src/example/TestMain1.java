@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 import org.coalery.CoBarGraph;
+import org.coalery.CoGraphConstant;
 import org.coalery.CoGraphItem;
+import org.coalery.CoLineGraph;
 import org.coalery.exception.CoGraphInvalidException;
 
 public class TestMain1 {
@@ -46,29 +48,41 @@ public class TestMain1 {
 		values2.add(new CoGraphItem(15));
 		values2.add(new CoGraphItem(15));
 		
-		CoBarGraph graph0 = new CoBarGraph(contents, values0);
-		CoBarGraph graph1 = new CoBarGraph(contents, values1);
-		CoBarGraph graph2 = new CoBarGraph(contents, values2);
-		CoBarGraph emptyGraph = new CoBarGraph(new String[] {}, new CoGraphItem[] {});
+		CoBarGraph bgraph0 = new CoBarGraph(contents, values0);
+		CoBarGraph bgraph1 = new CoBarGraph(contents, values1);
+		CoBarGraph bgraph2 = new CoBarGraph(contents, values2);
+		CoBarGraph bgraph3 = new CoBarGraph(new String[] {}, new CoGraphItem[] {});
 		
-		graph1.setGraphBarSize(5);
+		CoLineGraph lgraph0 = new CoLineGraph(contents, values0);
+		CoLineGraph lgraph1 = new CoLineGraph(contents, values1);
+		CoLineGraph lgraph2 = new CoLineGraph(contents, values2);
+		CoLineGraph lgraph3 = new CoLineGraph(new String[] {}, new CoGraphItem[] {});
 		
-		emptyGraph.addItem("Hello1", new CoGraphItem(5, 3));
-		emptyGraph.addItem("Hello2", new CoGraphItem(7, 1));
-		emptyGraph.addItem("Hello3", new CoGraphItem(6, 9));
-		emptyGraph.addItem("Hello4", new CoGraphItem(3, 2));
+		bgraph1.setGraphBarSize(5);
+		bgraph1.setOrientation(CoGraphConstant.GRAPH_HORIZONTAL_BAR);
 		
-		graph1.setOrientation(CoBarGraph.GRAPH_HORIZONTAL_BAR);
+		bgraph3.addItem("Hello1", new CoGraphItem(5, 3));
+		bgraph3.addItem("Hello2", new CoGraphItem(7, 1));
+		bgraph3.addItem("Hello3", new CoGraphItem(6, 9));
+		bgraph3.addItem("Hello4", new CoGraphItem(3, 2));
+		
+		lgraph1.setOrientation(CoGraphConstant.GRAPH_HORIZONTAL_BAR);
+		
+		lgraph3.addItem("Hello1", new CoGraphItem(5, 3));
+		lgraph3.addItem("Hello2", new CoGraphItem(7, 1));
+		lgraph3.addItem("Hello3", new CoGraphItem(6, 9));
+		lgraph3.addItem("Hello4", new CoGraphItem(3, 2));
 		
 		JFrame frame = new JFrame("CoGraph Test");
 		frame.addWindowListener(new WindowAdapter() {public void windowClosing(WindowEvent event) {System.exit(0);}}); // Exit
-		frame.setLayout(new GridLayout(4, 1));
+		frame.setLayout(new GridLayout(4, 2));
 		
-		frame.setSize(600, 900);
-		frame.add(graph0);
-		frame.add(graph1);
-		frame.add(graph2);
-		frame.add(emptyGraph);
+		frame.setSize(1200, 900);
+		
+		frame.add(bgraph0); frame.add(lgraph0);
+		frame.add(bgraph1); frame.add(lgraph1);
+		frame.add(bgraph2); frame.add(lgraph2);
+		frame.add(bgraph3); frame.add(lgraph3);
 		
 		frame.setVisible(true);
 //		frame.setResizable(false);

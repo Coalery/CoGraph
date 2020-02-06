@@ -23,12 +23,9 @@ public class CoBarGraph extends JPanel {
 	private int graphMargin = 50;
 	private int graphBarSize = 10;
 	
-	private Color[] graphBarColor = {Color.ORANGE, Color.BLUE};
+	private Color[] graphBarColor = {Color.ORANGE, Color.BLUE, Color.RED};
 	
 	private int graphBarOrientation = 0; // default -> vertical
-	
-	public static final int GRAPH_VERTICAL_BAR = 0;
-	public static final int GRAPH_HORIZONTAL_BAR = 1;
 	
 	public CoBarGraph(String[] contents, CoGraphItem[] values) throws CoGraphInvalidException {
 		this(Arrays.asList(contents), Arrays.asList(values));
@@ -89,6 +86,8 @@ public class CoBarGraph extends JPanel {
 	
 	public int getOrientation() { return graphBarOrientation; }
 	public void setOrientation(int graphBarOrientation) {
+		if(!(graphBarOrientation == CoGraphConstant.GRAPH_HORIZONTAL_BAR || graphBarOrientation == CoGraphConstant.GRAPH_VERTICAL_BAR))
+			return;
 		this.graphBarOrientation = graphBarOrientation;
 		repaint();
 	}
@@ -114,7 +113,7 @@ public class CoBarGraph extends JPanel {
 		
 		Graphics2D g2 = (Graphics2D)g;
 		
-		if(graphBarOrientation == GRAPH_VERTICAL_BAR) { // if graph orientation is vertical.
+		if(graphBarOrientation == CoGraphConstant.GRAPH_VERTICAL_BAR) { // if graph orientation is vertical.
 			int l1x1 = graphMargin, l1y1 = graphMargin, l1x2 = graphMargin, l1y2 = getSize().height - graphMargin;
 			int l2x1 = graphMargin, l2y1 = getSize().height - graphMargin, l2x2 = getSize().width - graphMargin, l2y2 = getSize().height - graphMargin;
 			
@@ -153,7 +152,7 @@ public class CoBarGraph extends JPanel {
 					int x = contentStrStartPoint.x + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - (values.get(i).length() * graphBarSize / 2) + graphBarSize * j;
 					int y = getSize().height - graphMargin - graphBarHeight;
 					String valueStr = String.valueOf(values.get(i).getValue(j));
-					g2.setColor(graphBarColor[j % 2]);
+					g2.setColor(graphBarColor[j % graphBarColor.length]);
 					g2.fillRect(x, y, graphBarSize, graphBarHeight);
 					
 					g2.setColor(Color.BLACK);
@@ -177,7 +176,7 @@ public class CoBarGraph extends JPanel {
 				g2.drawLine(graphMargin - 5, calY, graphMargin, calY);
 				g2.drawString(String.format("%4d", yAxisGap * 2 * i), graphMargin - 35, calY + 5);
 			}
-		} else if(graphBarOrientation == GRAPH_HORIZONTAL_BAR) { // if graph orientation is horizontal.
+		} else if(graphBarOrientation == CoGraphConstant.GRAPH_HORIZONTAL_BAR) { // if graph orientation is horizontal.
 			int l1x1 = graphMargin, l1y1 = graphMargin, l1x2 = graphMargin, l1y2 = getSize().height - graphMargin;
 			int l2x1 = graphMargin, l2y1 = getSize().height - graphMargin, l2x2 = getSize().width - graphMargin, l2y2 = getSize().height - graphMargin;
 			
