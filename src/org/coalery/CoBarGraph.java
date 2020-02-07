@@ -10,12 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.JPanel;
-
 import org.coalery.exception.CoGraphInvalidException;
 
 @SuppressWarnings("serial")
-public class CoBarGraph extends JPanel {
+public class CoBarGraph extends CoFieldGraph {
 	
 	private List<String> contents; // or item? ( variable name )
 	private List<CoGraphItem> values;
