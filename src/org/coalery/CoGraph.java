@@ -4,6 +4,9 @@ import java.awt.Graphics;
 
 public interface CoGraph {
 	
+	boolean isValueDraw();
+	void setValueDraw(boolean isValueDraw);
+	
 	String getContentAt(int index);
 	void setContentAt(int index, String content);
 	

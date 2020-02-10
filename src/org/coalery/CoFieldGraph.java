@@ -21,7 +21,13 @@ public abstract class CoFieldGraph extends JPanel implements CoGraph {
 	protected Color[] graphBarColor = {Color.ORANGE, Color.BLUE, Color.RED};
 	protected int graphBarOrientation = 0;
 	
-	public CoFieldGraph(List<String> contents, List<CoGraphItem> values) throws CoGraphInvalidException {
+	protected boolean isValueDraw = true;
+	protected boolean isStacked;
+	
+	private static final String graphFontName = "Consolas";
+	
+	public CoFieldGraph(List<String> contents, List<CoGraphItem> values) throws CoGraphInvalidException { this(contents, values, false); }
+	public CoFieldGraph(List<String> contents, List<CoGraphItem> values, boolean isStacked) throws CoGraphInvalidException {
 		if(contents == null || values == null)
 			throw new CoGraphInvalidException("Contents List or Values List is null!");
 		if(contents.size() != values.size())
@@ -38,6 +44,14 @@ public abstract class CoFieldGraph extends JPanel implements CoGraph {
 		
 		this.contents.addAll(contents);
 		this.values.addAll(values);
+		
+		this.isStacked = isStacked;
+	}
+	
+	public boolean isValueDraw() { return isValueDraw; }
+	public void setValueDraw(boolean isValueDraw) {
+		this.isValueDraw = isValueDraw;
+		repaint();
 	}
 	
 	public String getContentAt(int index) { return contents.get(index); }
@@ -79,13 +93,23 @@ public abstract class CoFieldGraph extends JPanel implements CoGraph {
 		repaint();
 	}
 	
-	protected int getAxisGap() {
+	private int getAxisGap() {
 		int maxVal = -1;
-		for(int i=0; i<values.size(); i++)
-			for(int j=0; j<values.get(i).length(); j++)
-				if(values.get(i).getValue(j) > maxVal)
-					maxVal = values.get(i).getValue(j);
 		
+		if(isStacked) {
+			for(int i=0; i<values.size(); i++) {
+				int tmpSum = 0;
+				for(int j=0; j<values.get(i).length(); j++)
+					tmpSum += values.get(i).getValue(j);
+				if(tmpSum > maxVal)
+					maxVal = tmpSum;
+			}
+		} else {
+			for(int i=0; i<values.size(); i++)
+				for(int j=0; j<values.get(i).length(); j++)
+					if(values.get(i).getValue(j) > maxVal)
+						maxVal = values.get(i).getValue(j);
+		}
 		if(maxVal % 10 == 0)
 			return maxVal / 10;
 		for(int i=0; true; i++)
@@ -127,7 +151,7 @@ public abstract class CoFieldGraph extends JPanel implements CoGraph {
 			// X Axis Draw
 			g2.setColor(Color.BLACK);
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setFont(new Font("Consolas", Font.PLAIN, 12)); // or Naver's D2Coding
+			g2.setFont(new Font(graphFontName, Font.PLAIN, 12)); // or Naver's D2Coding
 			for(int i=0; i<contents.size(); i++) {
 				String strToDraw = contents.get(i);
 				if(strToDraw.length() > graphContentDeltaX / 10)
@@ -142,6 +166,9 @@ public abstract class CoFieldGraph extends JPanel implements CoGraph {
 				g2.drawLine(graphMargin - 5, calY, graphMargin, calY);
 				g2.drawString(String.format("%4d", axisGap * 2 * i), graphMargin - 35, calY + 5);
 			}
+			
+			g2.setFont(new Font(graphFontName, Font.PLAIN, 10)); // or Naver's D2Coding
+			paintVerticalGraph(g, graphWidth, graphHeight, graphContentDeltaX, axisGap);
 		} else if(graphBarOrientation == CoGraphConstant.GRAPH_HORIZONTAL_BAR) { // if graph orientation is horizontal.
 			// Base Line Draw
 			g2.setColor(Color.BLACK);
@@ -159,7 +186,7 @@ public abstract class CoFieldGraph extends JPanel implements CoGraph {
 			// X Axis Draw
 			g2.setColor(Color.BLACK);
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setFont(new Font("Consolas", Font.PLAIN, 12)); // or Naver's D2Coding
+			g2.setFont(new Font(graphFontName, Font.PLAIN, 12)); // or Naver's D2Coding
 			for(int i=0; i<5; i++) {
 				String strToDraw = String.valueOf(axisGap * 2 * (5-i));
 				int calX = graphWidth / 5 * (5-i) + graphMargin;
@@ -175,7 +202,13 @@ public abstract class CoFieldGraph extends JPanel implements CoGraph {
 					strToDraw = strToDraw.substring(0, graphMargin / 10);
 				g2.drawString(strToDraw, graphMargin - 35 - 1, graphContentDeltaY * (i + 0.5f) + graphMargin + 3.5f);
 			}
+			
+			g2.setFont(new Font(graphFontName, Font.PLAIN, 10)); // or Naver's D2Coding
+			paintHorizontalGraph(g, graphWidth, graphHeight, graphContentDeltaY, axisGap);
 		}
 	}
+	
+	public abstract void paintVerticalGraph(Graphics g, int graphWidth, int graphHeight, int graphContentDeltaX, int axisGap);
+	public abstract void paintHorizontalGraph(Graphics g, int graphWidth, int graphHeight, int graphContentDeltaY, int axisGap);
 	
 }
