@@ -1,4 +1,4 @@
-package org.coalery;
+package org.coalery.field;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.List;
 
+import org.coalery.CoGraphItem;
 import org.coalery.exception.CoGraphInvalidException;
 
 @SuppressWarnings("serial")

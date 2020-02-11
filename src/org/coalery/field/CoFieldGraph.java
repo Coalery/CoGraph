@@ -1,4 +1,4 @@
-package org.coalery;
+package org.coalery.field;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -8,23 +8,15 @@ import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JPanel;
-
+import org.coalery.CoGraph;
+import org.coalery.CoGraphConstant;
+import org.coalery.CoGraphItem;
 import org.coalery.exception.CoGraphInvalidException;
 
 @SuppressWarnings("serial")
-public abstract class CoFieldGraph extends JPanel implements CoGraph {
-	protected List<String> contents;
-	protected List<CoGraphItem> values;
+public abstract class CoFieldGraph extends CoGraph {
 	
-	protected int graphMargin = 50;
-	protected Color[] graphBarColor = {Color.ORANGE, Color.BLUE, Color.RED};
-	protected int graphBarOrientation = 0;
-	
-	protected boolean isValueDraw = true;
 	protected boolean isStacked;
-	
-	private static final String graphFontName = "Consolas";
 	
 	public CoFieldGraph(List<String> contents, List<CoGraphItem> values) throws CoGraphInvalidException { this(contents, values, false); }
 	public CoFieldGraph(List<String> contents, List<CoGraphItem> values, boolean isStacked) throws CoGraphInvalidException {
@@ -48,37 +40,6 @@ public abstract class CoFieldGraph extends JPanel implements CoGraph {
 		this.isStacked = isStacked;
 	}
 	
-	public boolean isValueDraw() { return isValueDraw; }
-	public void setValueDraw(boolean isValueDraw) {
-		this.isValueDraw = isValueDraw;
-		repaint();
-	}
-	
-	public String getContentAt(int index) { return contents.get(index); }
-	public void setContentAt(int index, String content) {
-		contents.set(index, content);
-		repaint();
-	}
-	
-	public CoGraphItem getValueAt(int index) { return values.get(index); }
-	public void setValueAt(int index, CoGraphItem value) {
-		values.set(index, value);
-		repaint();
-	}
-	
-	public Integer getValueByContentName(String contentName) { return contents.indexOf(contentName); }
-	public void setValueByContentName(String contentName, CoGraphItem value) {
-		int targetIndex = getValueByContentName(contentName);
-		if(targetIndex != -1) setValueAt(targetIndex, value);
-		repaint();
-	}
-	
-	public int getGraphMargin() { return graphMargin; }
-	public void setGraphMargin(int graphMargin) {
-		this.graphMargin = graphMargin;
-		repaint();
-	}
-	
 	public int getOrientation() { return graphBarOrientation; }
 	public void setOrientation(int graphBarOrientation) {
 		if(!(graphBarOrientation == CoGraphConstant.GRAPH_HORIZONTAL_BAR || graphBarOrientation == CoGraphConstant.GRAPH_VERTICAL_BAR))
@@ -86,14 +47,9 @@ public abstract class CoFieldGraph extends JPanel implements CoGraph {
 		this.graphBarOrientation = graphBarOrientation;
 		repaint();
 	}
-
-	public void addItem(String contentName, CoGraphItem value) {
-		contents.add(contentName);
-		values.add(value);
-		repaint();
-	}
 	
-	private int getAxisGap() {
+	@Override
+	protected int getAxisGap() {
 		int maxVal = -1;
 		
 		if(isStacked) {

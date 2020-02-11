@@ -7,12 +7,13 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import org.coalery.CoBarGraph;
 import org.coalery.CoGraphConstant;
 import org.coalery.CoGraphItem;
-import org.coalery.CoLineGraph;
-import org.coalery.CoStackedBarGraph;
 import org.coalery.exception.CoGraphInvalidException;
+import org.coalery.field.CoBarGraph;
+import org.coalery.field.CoLineGraph;
+import org.coalery.field.CoStackedBarGraph;
+import org.coalery.normal.CoPieGraph;
 
 public class TestMain1 {
 	
@@ -45,6 +46,13 @@ public class TestMain1 {
 		values2.add(new CoGraphItem(73));
 		values2.add(new CoGraphItem(15));
 		
+		ArrayList<Integer> pValues0 = new ArrayList<Integer>();
+		pValues0.add(1);
+		pValues0.add(3);
+		pValues0.add(2);
+		pValues0.add(5);
+		pValues0.add(6);
+		
 		CoBarGraph bgraph0 = new CoBarGraph(contents, values0);
 		CoBarGraph bgraph1 = new CoBarGraph(contents, values1);
 		CoBarGraph bgraph2 = new CoBarGraph(contents, values2);
@@ -59,6 +67,8 @@ public class TestMain1 {
 		CoStackedBarGraph sbgraph1 = new CoStackedBarGraph(contents, values1);
 		CoStackedBarGraph sbgraph2 = new CoStackedBarGraph(contents, values2);
 		CoStackedBarGraph sbgraph3 = new CoStackedBarGraph(new String[] {}, new CoGraphItem[] {});
+		
+		CoPieGraph pgraph0 = new CoPieGraph(contents, pValues0);
 		
 		bgraph1.setGraphBarSize(5);
 		bgraph1.setOrientation(CoGraphConstant.GRAPH_HORIZONTAL_BAR);
@@ -91,14 +101,14 @@ public class TestMain1 {
 		
 		JFrame frame = new JFrame("CoGraph Test");
 		frame.addWindowListener(new WindowAdapter() {public void windowClosing(WindowEvent event) {System.exit(0);}}); // Exit
-		frame.setLayout(new GridLayout(4, 3));
+		frame.setLayout(new GridLayout(4, 4));
 		
 		frame.setSize(1800, 900);
 		
-		frame.add(bgraph0); frame.add(lgraph0); frame.add(sbgraph0);
-		frame.add(bgraph1); frame.add(lgraph1); frame.add(sbgraph1);
-		frame.add(bgraph2); frame.add(lgraph2); frame.add(sbgraph2);
-		frame.add(bgraph3); frame.add(lgraph3); frame.add(sbgraph3);
+		frame.add(bgraph0); frame.add(lgraph0); frame.add(sbgraph0); frame.add(pgraph0);
+		frame.add(bgraph1); frame.add(lgraph1); frame.add(sbgraph1); frame.add(pgraph0);
+		frame.add(bgraph2); frame.add(lgraph2); frame.add(sbgraph2); frame.add(pgraph0);
+		frame.add(bgraph3); frame.add(lgraph3); frame.add(sbgraph3); frame.add(pgraph0);
 		
 		frame.setVisible(true);
 	}

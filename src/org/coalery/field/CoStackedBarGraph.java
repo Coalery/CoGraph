@@ -1,4 +1,4 @@
-package org.coalery;
+package org.coalery.field;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.List;
 
+import org.coalery.CoGraphItem;
 import org.coalery.exception.CoGraphInvalidException;
 
 @SuppressWarnings("serial")
@@ -37,7 +38,7 @@ public class CoStackedBarGraph extends CoFieldGraph {
 				
 				if(isValueDraw) {
 					g2.setColor(Color.BLACK);
-					g2.drawString(valueStr, x + graphBarSize / 2.0f - valueStr.length() * 3.0f, y + 9);
+					g2.drawString(valueStr, x + graphBarSize / 2.0f - valueStr.length() * 3.0f, y + 7);
 				}
 				
 				sumHeight += graphBarHeight;
