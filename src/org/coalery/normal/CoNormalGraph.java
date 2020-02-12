@@ -36,7 +36,9 @@ public abstract class CoNormalGraph extends CoGraph { // TODO Change Class Name.
 
 	@Override
 	public void paint(Graphics g) {
-		
+		if(contents.size() == 0)
+			return;
+		paintGraph(g);
 	}
 	
 	public abstract void paintGraph(Graphics g);

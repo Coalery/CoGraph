@@ -99,6 +99,8 @@ public class TestMain1 {
 		sbgraph3.addItem("Hello3", new CoGraphItem(6, 9));
 		sbgraph3.addItem("Hello4", new CoGraphItem(3, 2));
 		
+		pgraph0.setGraphMargin(30);
+		
 		JFrame frame = new JFrame("CoGraph Test");
 		frame.addWindowListener(new WindowAdapter() {public void windowClosing(WindowEvent event) {System.exit(0);}}); // Exit
 		frame.setLayout(new GridLayout(4, 4));
@@ -106,9 +108,9 @@ public class TestMain1 {
 		frame.setSize(1800, 900);
 		
 		frame.add(bgraph0); frame.add(lgraph0); frame.add(sbgraph0); frame.add(pgraph0);
-		frame.add(bgraph1); frame.add(lgraph1); frame.add(sbgraph1); frame.add(pgraph0);
-		frame.add(bgraph2); frame.add(lgraph2); frame.add(sbgraph2); frame.add(pgraph0);
-		frame.add(bgraph3); frame.add(lgraph3); frame.add(sbgraph3); frame.add(pgraph0);
+		frame.add(bgraph1); frame.add(lgraph1); frame.add(sbgraph1);
+		frame.add(bgraph2); frame.add(lgraph2); frame.add(sbgraph2);
+		frame.add(bgraph3); frame.add(lgraph3); frame.add(sbgraph3);
 		
 		frame.setVisible(true);
 	}

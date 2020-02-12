@@ -33,7 +33,7 @@ public class CoStackedBarGraph extends CoFieldGraph {
 				int y = getSize().height - graphMargin - graphBarHeight - sumHeight;
 				
 				String valueStr = String.valueOf(values.get(i).getValue(j));
-				g2.setColor(graphBarColor[j % graphBarColor.length]);
+				g2.setColor(graphColor[j % graphColor.length]);
 				g2.fillRect(x, y, graphBarSize, graphBarHeight);
 				
 				if(isValueDraw) {
@@ -57,7 +57,7 @@ public class CoStackedBarGraph extends CoFieldGraph {
 				int y = graphMargin + graphContentDeltaY * i + graphContentDeltaY / 2 - (graphBarSize / 2);
 				
 				String valueStr = String.valueOf(values.get(i).getValue(j));
-				g2.setColor(graphBarColor[j % 2]);
+				g2.setColor(graphColor[j % graphColor.length]);
 				g2.fillRect(x, y, graphBarWidth, graphBarSize);
 				
 				if(isValueDraw) {

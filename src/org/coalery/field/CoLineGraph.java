@@ -22,7 +22,7 @@ public class CoLineGraph extends CoFieldGraph {
 				int x = graphMargin + graphContentDeltaX * i + graphContentDeltaX / 2;
 				int y = getSize().height - graphMargin - (int)((values.get(i).getValue(j) / (float)(axisGap * 10)) * graphHeight);
 				
-				g2.setColor(graphBarColor[j % graphBarColor.length]);
+				g2.setColor(graphColor[j % graphColor.length]);
 				g2.fillOval(x-3, y-3, 6, 6);
 				
 				if(i != values.size() - 1) {
@@ -47,7 +47,7 @@ public class CoLineGraph extends CoFieldGraph {
 				int x = graphMargin + (int)((values.get(i).getValue(j) / (float)(axisGap * 10)) * graphWidth);
 				int y = graphMargin + graphContentDeltaY * i + graphContentDeltaY / 2;
 				
-				g2.setColor(graphBarColor[j % graphBarColor.length]);
+				g2.setColor(graphColor[j % graphColor.length]);
 				g2.fillOval(x-3, y-3, 6, 6);
 				
 				if(i != values.size() - 1) {

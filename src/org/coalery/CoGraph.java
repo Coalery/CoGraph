@@ -15,7 +15,7 @@ public abstract class CoGraph extends JPanel {
 	protected List<CoGraphItem> values;
 	
 	protected int graphMargin = 50;
-	protected Color[] graphBarColor = {Color.ORANGE, Color.CYAN, Color.MAGENTA};
+	protected Color[] graphColor = {Color.ORANGE, Color.CYAN, Color.MAGENTA, Color.GRAY, Color.GREEN};
 	protected int graphBarOrientation = 0;
 	
 	protected boolean isValueDraw = true;

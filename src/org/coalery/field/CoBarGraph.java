@@ -31,7 +31,7 @@ public class CoBarGraph extends CoFieldGraph {
 				int x = graphMargin + ( graphContentDeltaX * i ) + ( graphContentDeltaX / 2 ) - (values.get(i).length() * graphBarSize / 2) + graphBarSize * j;
 				int y = getSize().height - graphMargin - graphBarHeight;
 				String valueStr = String.valueOf(values.get(i).getValue(j));
-				g2.setColor(graphBarColor[j % graphBarColor.length]);
+				g2.setColor(graphColor[j % graphColor.length]);
 				g2.fillRect(x, y, graphBarSize, graphBarHeight);
 				
 				if(isValueDraw) {
@@ -51,7 +51,7 @@ public class CoBarGraph extends CoFieldGraph {
 				int y = graphMargin + graphContentDeltaY * i + graphContentDeltaY / 2 - (values.get(i).length() * graphBarSize / 2) + graphBarSize * j;
 				
 				String valueStr = String.valueOf(values.get(i).getValue(j));
-				g2.setColor(graphBarColor[j % 2]);
+				g2.setColor(graphColor[j % graphColor.length]);
 				g2.fillRect(x, y, graphBarWidth, graphBarSize);
 				
 				if(isValueDraw) {
