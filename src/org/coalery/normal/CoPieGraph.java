@@ -1,5 +1,6 @@
 package org.coalery.normal;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Arrays;
@@ -25,13 +26,21 @@ public class CoPieGraph extends CoNormalGraph {
 			sum += values.get(i).getValue(0);
 		
 		int angleSum = 0;
-		System.out.println(values.size());
 		for(int i=0; i<values.size(); i++) {
-			int angle = (int)((float)values.get(i).getValue(0) / (float)sum * 360.0f);
+			int angle = (int)((double)values.get(i).getValue(0) / (double)sum * 360.0);
 			g2.setColor(graphColor[i % graphColor.length]);
-			g2.fillArc(x, y, size, size, angleSum, angle);
-			System.out.println(angleSum + ", " + angle);
+			if(i == values.size() - 1)
+				g2.fillArc(x, y, size, size, angleSum, 360 - angleSum);
+			else
+				g2.fillArc(x, y, size, size, angleSum, angle);
 			angleSum += angle;
+			
+			if(isValueDraw) {
+				g2.setColor(Color.BLACK);
+				String valueStr = String.valueOf(values.get(i).getValue(0));
+				g2.drawString(valueStr, x + size / 2 - valueStr.length() * 3.5f + ((float)Math.cos((angleSum - angle / 2) / 180.0 * Math.PI) * size / 3), (y + size / 2 + 5) - ((float)Math.sin((angleSum - angle / 2) / 180.0 * Math.PI) * size / 3));
+				System.out.println(valueStr);
+			}
 		}
 	}
 	

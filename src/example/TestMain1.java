@@ -47,11 +47,11 @@ public class TestMain1 {
 		values2.add(new CoGraphItem(15));
 		
 		ArrayList<Integer> pValues0 = new ArrayList<Integer>();
-		pValues0.add(1);
-		pValues0.add(3);
-		pValues0.add(2);
+		pValues0.add(7);
 		pValues0.add(5);
-		pValues0.add(6);
+		pValues0.add(9);
+		pValues0.add(4);
+		pValues0.add(10);
 		
 		CoBarGraph bgraph0 = new CoBarGraph(contents, values0);
 		CoBarGraph bgraph1 = new CoBarGraph(contents, values1);
